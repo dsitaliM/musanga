@@ -14,6 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/v1/', artistRouter);
 app.use('/api/v1/', albumRouter);
 
-app.listen(3000, () => {
+app.listen(8000, () => {
     console.log('Server started on http://localhost:3000');
 });
