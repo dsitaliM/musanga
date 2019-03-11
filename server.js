@@ -1,7 +1,18 @@
 import express from 'express';
-const app = express();
-const port = process.env.PORT || 5656;
+import albumRouter from './routes/albumRouter';
+import artistRouter from './routes/artistRouter';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
 
-app.get('api/v1/artists', (req, res) => {
-    //get artists
+const app = express();
+mongoose.connect('mongodb://localhost/artistdb');
+
+// Creates body from incoming json
+app.use(bodyParser.json());
+
+app.use('/api/v1/', albumRouter);
+app.use('/api/v1/', artistRouter);
+
+app.listen(3000, () => {
+    console.log('Server started on http://localhost:3000');
 });
