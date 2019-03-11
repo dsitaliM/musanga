@@ -1,5 +1,7 @@
 import express from 'express';
 import ArtistModel from '../models/artist';
+import AlbumModel from '../models/album';
+
 const artistRouter = express.Router();
 
 artistRouter
@@ -9,7 +11,13 @@ artistRouter
         });
         //res.send("Yep it's working");
     })
-    .post('/artists/', (req, res) => {
+    .post('/artists', (req, res) => {
+        // let album =
+        // let artist = new ArtistModel({
+        //     name: req.body.name,
+        //     photo: req.body.photo,
+        //     albums: new AlbumModel(req.body.albums)
+        // });
         let artist = new ArtistModel(req.body);
         artist.save();
         res.status(201).send(artist);
