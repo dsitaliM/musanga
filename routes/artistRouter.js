@@ -1,6 +1,5 @@
 import express from 'express';
 import ArtistModel from '../models/artist';
-import AlbumModel from '../models/album';
 
 const artistRouter = express.Router();
 
