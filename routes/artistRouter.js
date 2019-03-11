@@ -29,11 +29,6 @@ artistRouter
             res.json(artist);
         });
     })
-    // .get('/artists/search/:artistName/', (req, res) => {
-    //     APIModel.findById(req.params.artistId, (err, artist) => {
-    //         res.json(artist);
-    //     });
-    // })
     .put('/artists/update/:artistId', (req, res) => {
         APIModel.findOneAndUpdate(
             { _id: req.params.artistId },
@@ -48,7 +43,7 @@ artistRouter
         );
     })
     .delete('/artists/delete/:artistId', (req, res) => {
-        APIModel.remove({ _id: req.params.id }, (err, artist) => {
+        APIModel.remove({ _id: req.params.artistId }, (err, artist) => {
             if (err) {
                 res.send(err);
             }

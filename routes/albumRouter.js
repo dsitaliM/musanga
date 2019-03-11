@@ -13,35 +13,55 @@ albumRouter
         });
     })
     .post('/albums/create/', (req, res) => {
-        let artist = new APIModel(req.body);
-        artist.save();
-        res.status(201).send(artist);
+        let album = new APIModel(req.body);
+        album.save((err, album) => {
+            if (err) {
+                res.send(err);
+            }
+            res.status(201).send(album);
+        });
     })
     .get('/albums/search/:albumId/', (req, res) => {
-        APIModel.findById(req.params.artistId, (err, artist) => {
-            res.json(artist);
+        APIModel.find({}, { albums: 1 }, (err, albums) => {
+            if (err) {
+                res.send(err);
+            }
+            albums.findById(req.params.albumId, (err, album) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(album);
+            });
         });
     })
-    .get('/albums/search/:albumTitle/', (req, res) => {
-        APIModel.findById(req.params.artistId, (err, artist) => {
-            res.json(artist);
-        });
-    })
-    .put('/albums/update/:artistId', (req, res) => {
-        APIModel.findById(req.params.artistId, (err, artist) => {
-            //TODO
-            artist.save();
-            res.json(artist);
+    .put('/albums/update/:albumId', (req, res) => {
+        APIModel.find({}, { albums: 1 }, (err, albums) => {
+            if (err) {
+                res.send(err);
+            }
+            albums.findOneAndUpdate(
+                { _id: req.params.albumId },
+                req.body,
+                { new: true },
+                (err, album) => {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json(album);
+                }
+            );
         });
     })
     .delete('/albums/delete/:albumId', (req, res) => {
-        APIModel.findById(req.params.artistId, (err, artist) => {
-            artist.remove(err => {
+        APIModel.find({}, { albums: 1 }, (err, albums) => {
+            if (err) {
+                res.send(err);
+            }
+            albums.remove({ _id: req.params.albumId }, (err, album) => {
                 if (err) {
-                    res.status(500).send(err);
-                } else {
-                    res.status(204).send('removed');
+                    res.send(err);
                 }
+                res.json({ message: 'Artist successfully deleted' });
             });
         });
     });
