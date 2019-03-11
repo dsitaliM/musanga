@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
-const ArtistModel = new Schema({
+const APIModel = new Schema({
     name: { type: String },
     photo: { type: String },
     albums: [
@@ -13,4 +13,4 @@ const ArtistModel = new Schema({
     ]
 });
 
-export default mongoose.model('Artist', ArtistModel);
+export default mongoose.model('Artist', APIModel);

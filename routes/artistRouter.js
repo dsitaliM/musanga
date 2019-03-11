@@ -1,47 +1,58 @@
 import express from 'express';
-import ArtistModel from '../models/artist';
+import APIModel from '../models/apiModel';
 
 const artistRouter = express.Router();
 
 artistRouter
-    .get('/artists', (req, res) => {
-        ArtistModel.find({}, (err, artists) => {
+    .get('/artists/', (req, res) => {
+        APIModel.find({}, (err, artists) => {
+            if (err) {
+                res.send(err);
+            }
             res.json(artists);
         });
-        //res.send("Yep it's working");
     })
-    .post('/artists', (req, res) => {
-        // let album =
-        // let artist = new ArtistModel({
-        //     name: req.body.name,
-        //     photo: req.body.photo,
-        //     albums: new AlbumModel(req.body.albums)
-        // });
-        let artist = new ArtistModel(req.body);
-        artist.save();
-        res.status(201).send(artist);
+    .post('/artists/create/', (req, res) => {
+        let artist = new APIModel(req.body);
+        artist.save((err, artist) => {
+            if (err) {
+                res.send(err);
+            }
+            res.status(201).send(artist);
+        });
     })
-    .get('/artists/search/:artistId', (req, res) => {
-        ArtistModel.findById(req.params.artistId, (err, artist) => {
+    .get('/artists/search/:artistId/', (req, res) => {
+        APIModel.findById(req.params.artistId, (err, artist) => {
+            if (err) {
+                res.send(err);
+            }
             res.json(artist);
         });
     })
-    .put((req, res) => {
-        ArtistModel.findById(req.params.artistId, (err, artist) => {
-            //TODO
-            artist.save();
-            res.json(artist);
-        });
-    })
-    .delete((req, res) => {
-        ArtistModel.findById(req.params.artistId, (err, artist) => {
-            artist.remove(err => {
+    // .get('/artists/search/:artistName/', (req, res) => {
+    //     APIModel.findById(req.params.artistId, (err, artist) => {
+    //         res.json(artist);
+    //     });
+    // })
+    .put('/artists/update/:artistId', (req, res) => {
+        APIModel.findOneAndUpdate(
+            { _id: req.params.artistId },
+            req.body,
+            { new: true },
+            (err, artist) => {
                 if (err) {
-                    res.status(500).send(err);
-                } else {
-                    res.status(204).send('removed');
+                    res.send(err);
                 }
-            });
+                res.json(artist);
+            }
+        );
+    })
+    .delete('/artists/delete/:artistId', (req, res) => {
+        APIModel.remove({ _id: req.params.id }, (err, artist) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json({ message: 'Artist successfully deleted' });
         });
     });
 

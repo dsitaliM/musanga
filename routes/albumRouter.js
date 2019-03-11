@@ -1,34 +1,42 @@
 import express from 'express';
-import AlbumModel from '../models/album';
+import APIModel from '../models/apiModel';
+
 const albumRouter = express.Router();
 
 albumRouter
-    .get('/albums', (req, res) => {
-        AlbumModel.find({}, (err, albums) => {
+    .get('/albums/', (req, res) => {
+        APIModel.find({}, { albums: 1 }, (err, albums) => {
+            if (err) {
+                res.send(err);
+            }
             res.json(albums);
         });
-        //res.send("Yep it's working");
     })
-    .post('/albums', (req, res) => {
-        let album = new AlbumModel(req.body);
-        album.save();
-        res.status(201).send(album);
+    .post('/albums/create/', (req, res) => {
+        let artist = new APIModel(req.body);
+        artist.save();
+        res.status(201).send(artist);
     })
-    .get('/album/search/:albumId', (req, res) => {
-        AlbumModel.findById(req.params.albumId, (err, album) => {
-            res.json(album);
+    .get('/albums/search/:albumId/', (req, res) => {
+        APIModel.findById(req.params.artistId, (err, artist) => {
+            res.json(artist);
         });
     })
-    .put((req, res) => {
-        AlbumModel.findById(req.params.albumId, (err, album) => {
+    .get('/albums/search/:albumTitle/', (req, res) => {
+        APIModel.findById(req.params.artistId, (err, artist) => {
+            res.json(artist);
+        });
+    })
+    .put('/albums/update/:artistId', (req, res) => {
+        APIModel.findById(req.params.artistId, (err, artist) => {
             //TODO
-            album.save();
-            res.json(album);
+            artist.save();
+            res.json(artist);
         });
     })
-    .delete((req, res) => {
-        AlbumModel.findById(req.params.albumId, (err, album) => {
-            album.remove(err => {
+    .delete('/albums/delete/:albumId', (req, res) => {
+        APIModel.findById(req.params.artistId, (err, artist) => {
+            artist.remove(err => {
                 if (err) {
                     res.status(500).send(err);
                 } else {
