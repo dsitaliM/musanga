@@ -1,12 +1,14 @@
 import express from 'express';
-import artistRouter from './routes/artistRouter';
-import albumRouter from './routes/albumRouter';
-import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import database from './config/database';
+import { PORT } from './config/properties';
+import artistsRoutes from './artists/artists.routes';
 
 const app = express();
-mongoose.connect('mongodb://localhost/artistdb');
+const router = express.Router();
+
+database();
 
 // process incoming json.
 app.use(bodyParser.json());
@@ -15,9 +17,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //allow cors
 app.use(cors());
 
-app.use('/api/v1/', artistRouter);
-app.use('/api/v1/', albumRouter);
+app.use('/api/v1/', router);
+artistsRoutes(router);
 
-app.listen(8000, () => {
-    console.log('Server started on http://localhost:8000');
+app.listen(PORT, () => {
+    console.log(`Server started on http://localhost:${PORT}`);
 });
