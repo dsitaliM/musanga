@@ -16,7 +16,7 @@ Musanga Challenge Submission.
 | mongoose  | Nice API for managing the mongo database |
 
 
-I got the random names from http://listofrandomnames.com and the pictures from https://randomuser.me/
+
 
 
 ### Running the Application
